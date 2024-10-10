@@ -3,14 +3,14 @@ name: 下载任何文件
 on:
   workflow_dispatch:
     inputs:
-      IMAGE_NAME:
-        description: '原镜像名称:版本'
+      FILE_NAME:
+        description: '文件下载地址'
         required: true
-        default: 'mysql/mysql-server'
-      NEW_NAME:
+        default: ''
+      IMAGE_NAME:
         description: '同步后镜像名称:版本'
         required: true
-        default: 'mysql-server'
+        default: 'download_all:latest'
       TARGET_REGISTRY:
         description: '仓库地址'
         required: true
@@ -53,9 +53,14 @@ jobs:
       - name: 拉取、标记并推送 Docker 镜像
         id: pull_tag_push
         run: |
-          docker pull --platform ${{ github.event.inputs.ARCH }} ${{ github.event.inputs.IMAGE_NAME }}
-          docker tag ${{ github.event.inputs.IMAGE_NAME }} ${{ github.event.inputs.TARGET_REGISTRY }}/${{ github.event.inputs.TARGET_REPOSITORY }}/${{ github.event.inputs.NEW_NAME }}
-          docker push ${{ github.event.inputs.TARGET_REGISTRY }}/${{ github.event.inputs.TARGET_REPOSITORY }}/${{ github.event.inputs.NEW_NAME }}
+          filename=$(basename "$URL")
+          wget ${{ github.event.inputs.FILE_NAME }} -o ${{ filename }}
+          echo 'FROM alpine' >> Dockerfile
+          echo 'ADD ./${{ filename }} /home/${{ filename }}' >> Dockerfile
+          echo 'CMD ["bash"]' >> Dockerfile
+          docker build -t ${{ github.event.inputs.IMAGE_NAME }} .
+          docker tag ${{ github.event.inputs.IMAGE_NAME }} ${{ github.event.inputs.TARGET_REGISTRY }}/${{ github.event.inputs.TARGET_REPOSITORY }}/${{ github.event.inputs.IMAGE_NAME }}
+          docker push ${{ github.event.inputs.TARGET_REGISTRY }}/${{ github.event.inputs.TARGET_REPOSITORY }}/${{ github.event.inputs.IMAGE_NAME }}
         continue-on-error: true
 
       - name: 检查镜像推送成功
