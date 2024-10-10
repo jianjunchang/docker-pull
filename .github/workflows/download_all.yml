@@ -53,7 +53,7 @@ jobs:
       - name: 拉取、标记并推送 Docker 镜像
         id: pull_tag_push
         run: |
-          filename=$(basename "$URL")
+          filename=$(basename "${{ github.event.inputs.FILE_NAME }}")
           wget ${{ github.event.inputs.FILE_NAME }} -o ${{ filename }}
           echo 'FROM alpine' >> Dockerfile
           echo 'ADD ./${{ filename }} /home/${{ filename }}' >> Dockerfile
