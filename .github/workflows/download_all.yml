@@ -55,10 +55,10 @@ jobs:
         run: |
           echo $(basename "${{ github.event.inputs.FILE_NAME }}")
           # filename=$(basename "${{ github.event.inputs.FILE_NAME }}")
-          wget ${{ github.event.inputs.FILE_NAME }} -o $(basename "${{ github.event.inputs.FILE_NAME }}")
-          echo FROM alpine >> Dockerfile
-          echo ADD ./$(basename "${{ github.event.inputs.FILE_NAME }}") /home/$(basename "${{ github.event.inputs.FILE_NAME }}") >> Dockerfile
-          echo ENTRYPOINT ["/bin/sh"] >> Dockerfile
+          wget ${{ github.event.inputs.FILE_NAME }} -o ./$(basename "${{ github.event.inputs.FILE_NAME }}")
+          echo FROM alpine >> ./Dockerfile
+          echo ADD ./$(basename "${{ github.event.inputs.FILE_NAME }}") /home/$(basename "${{ github.event.inputs.FILE_NAME }}") >> ./Dockerfile
+          echo ENTRYPOINT ["/bin/sh"] >> ./Dockerfile
           docker build -t ${{ github.event.inputs.IMAGE_NAME }} .
           docker tag ${{ github.event.inputs.IMAGE_NAME }} ${{ github.event.inputs.TARGET_REGISTRY }}/${{ github.event.inputs.TARGET_REPOSITORY }}/${{ github.event.inputs.IMAGE_NAME }}
           docker push ${{ github.event.inputs.TARGET_REGISTRY }}/${{ github.event.inputs.TARGET_REPOSITORY }}/${{ github.event.inputs.IMAGE_NAME }}
