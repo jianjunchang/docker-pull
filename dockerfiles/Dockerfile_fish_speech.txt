@@ -22,7 +22,8 @@ ARG DEPENDENCIES="  \
     portaudio19-dev \
     libportaudio2 \
     libportaudiocpp0 \
-    ffmpeg"
+    ffmpeg \
+    git"
 
 RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     --mount=type=cache,target=/var/lib/apt,sharing=locked \
