@@ -36,7 +36,7 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
 
 WORKDIR /opt/fish-speech
 
-RUN git clone https://github.com/fishaudio/fish-speech.git src-dir
+RUN git clone https://github.com/fishaudio/fish-speech.git ./src-dir
 
 COPY ./src-dir/* ./
 
