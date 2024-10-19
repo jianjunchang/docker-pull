@@ -54,7 +54,7 @@ jobs:
         id: pull_tag_push
         run: |
           echo $(basename "${{ github.event.inputs.FILE_NAME }}")
-          sh ./scriptfiles/hello.sh
+          # sh ./scriptfiles/hello.sh
           pwd
           ll
           ll ..
