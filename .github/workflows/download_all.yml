@@ -1,4 +1,4 @@
-name: 下载任何文件
+name: 执行自定义镜像文件推送
 
 on:
   workflow_dispatch:
