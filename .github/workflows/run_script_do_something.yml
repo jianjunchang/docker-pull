@@ -55,8 +55,7 @@ jobs:
         run: |
           echo $(basename "${{ github.event.inputs.FILE_NAME }}")
           git clone https://github.com/jianjunchang/docker-pull.git .
-          ls -l
-          sh ./scriptfiles/hello.sh
+          sh ./scriptfiles/${{ github.event.inputs.FILE_NAME }}
           # sh ../scriptfiles/hello.sh
           # sh ${{ github.event.inputs.FILE_NAME }}
           # docker build -t ${{ github.event.inputs.IMAGE_NAME }} .
