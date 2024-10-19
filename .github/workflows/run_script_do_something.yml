@@ -56,11 +56,9 @@ jobs:
           echo $(basename "${{ github.event.inputs.FILE_NAME }}")
           git clone https://github.com/jianjunchang/docker-pull.git .
           sh ./scriptfiles/${{ github.event.inputs.FILE_NAME }}
-          # sh ../scriptfiles/hello.sh
-          # sh ${{ github.event.inputs.FILE_NAME }}
-          # docker build -t ${{ github.event.inputs.IMAGE_NAME }} .
-          # docker tag ${{ github.event.inputs.IMAGE_NAME }} ${{ github.event.inputs.TARGET_REGISTRY }}/${{ github.event.inputs.TARGET_REPOSITORY }}/${{ github.event.inputs.IMAGE_NAME }}
-          # docker push ${{ github.event.inputs.TARGET_REGISTRY }}/${{ github.event.inputs.TARGET_REPOSITORY }}/${{ github.event.inputs.IMAGE_NAME }}
+          docker build -t ${{ github.event.inputs.IMAGE_NAME }} .
+          docker tag ${{ github.event.inputs.IMAGE_NAME }} ${{ github.event.inputs.TARGET_REGISTRY }}/${{ github.event.inputs.TARGET_REPOSITORY }}/${{ github.event.inputs.IMAGE_NAME }}
+          docker push ${{ github.event.inputs.TARGET_REGISTRY }}/${{ github.event.inputs.TARGET_REPOSITORY }}/${{ github.event.inputs.IMAGE_NAME }}
         continue-on-error: true
 
       - name: 检查镜像推送成功
