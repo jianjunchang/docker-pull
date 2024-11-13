@@ -57,7 +57,7 @@ jobs:
           echo $(basename "${{ github.event.inputs.FILE_NAME }}")
           git clone ${{ github.event.inputs.FILE_NAME }} -o repo
           echo 'FROM python:3.10-bullseye' >> Dockerfile
-          echo 'ADD ./repo /' >> Dockerfile
+          echo 'ADD repo /' >> Dockerfile
           echo 'CMD ["/usr/sbin/sshd", "-D"]' >> Dockerfile
           docker build -t ${{ github.event.inputs.IMAGE_NAME }} .
           docker tag ${{ github.event.inputs.IMAGE_NAME }} ${{ github.event.inputs.TARGET_REGISTRY }}/${{ github.event.inputs.TARGET_REPOSITORY }}/${{ github.event.inputs.IMAGE_NAME }}
