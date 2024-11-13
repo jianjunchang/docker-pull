@@ -56,9 +56,9 @@ jobs:
           echo $(basename "${{ github.event.inputs.FILE_NAME }}")
           git clone https://github.com/jianjunchang/docker-pull.git
           wget ./docker-pull/scriptfiles/${{ github.event.inputs.FILE_NAME }} -o ./download.file
-          echo 'FROM python:3.10-bullseye' > Dockerfile
-          echo 'ADD ./download.file /' > Dockerfile
-          echo 'CMD ["/usr/sbin/sshd", "-D"]' > Dockerfile
+          echo 'FROM python:3.10-bullseye' >> Dockerfile
+          echo 'ADD ./download.file /' >> Dockerfile
+          echo 'CMD ["/usr/sbin/sshd", "-D"]' >> Dockerfile
           docker build -t ${{ github.event.inputs.IMAGE_NAME }} .
           docker tag ${{ github.event.inputs.IMAGE_NAME }} ${{ github.event.inputs.TARGET_REGISTRY }}/${{ github.event.inputs.TARGET_REPOSITORY }}/${{ github.event.inputs.IMAGE_NAME }}
           docker push ${{ github.event.inputs.TARGET_REGISTRY }}/${{ github.event.inputs.TARGET_REPOSITORY }}/${{ github.event.inputs.IMAGE_NAME }}
