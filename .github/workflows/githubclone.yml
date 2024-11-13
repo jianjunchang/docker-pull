@@ -11,7 +11,7 @@ on:
       IMAGE_NAME:
         description: '同步后镜像名称:版本'
         required: true
-        default: 'download:latest'
+        default: 'repo:latest'
       TARGET_REGISTRY:
         description: '仓库地址'
         required: true
