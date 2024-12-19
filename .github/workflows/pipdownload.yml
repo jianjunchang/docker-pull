@@ -54,7 +54,7 @@ jobs:
         id: pull_tag_push
         run: |
           echo $(basename "${{ github.event.inputs.FILE_NAME }}")
-          echo 'FROM python:3.10-bullseye' >> Dockerfile
+          echo 'FROM python:3.8-bullseye' >> Dockerfile
           echo 'RUN pip download ${{ github.event.inputs.FILE_NAME }}' >> Dockerfile
           echo 'CMD ["/usr/sbin/sshd", "-D"]' >> Dockerfile
           docker build -t ${{ github.event.inputs.IMAGE_NAME }} .
