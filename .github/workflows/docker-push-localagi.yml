@@ -1,0 +1,85 @@
+name: 执行脚本推送
+
+on:
+  workflow_dispatch:
+    inputs:
+      FILE_NAME:
+        description: '脚本文件名'
+        required: true
+        default: ''
+      IMAGE_NAME:
+        description: '同步后镜像名称:版本'
+        required: true
+        default: 'script_all:latest'
+      TARGET_REGISTRY:
+        description: '仓库地址'
+        required: true
+        default: 'registry.cn-hangzhou.aliyuncs.com'
+      TARGET_REPOSITORY:
+        description: '空间名称'
+        required: true
+        default: 'changjianjun'
+      ARCH:
+        description: '系统架构'
+        required: true
+        default: 'amd64'
+        type: choice
+        options:
+          - amd64
+          - arm64
+          - arm/v7
+          - arm/v6
+          - 386
+          - s390x
+          - ppc64le
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 登录到 Docker 仓库
+        id: login
+        run: docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }} ${{ github.event.inputs.TARGET_REGISTRY }}
+        continue-on-error: true
+
+      - name: 检查 Docker 登录成功
+        if: ${{ steps.login.outcome == 'success' }}
+        run: echo "Docker 登录成功"
+
+      - name: 检查 Docker 登录失败
+        if: ${{ steps.login.outcome != 'success' }}
+        run: echo "Docker 登录失败"
+
+      - name: 拉取、标记并推送 Docker 镜像
+        id: pull_tag_push
+        run: |
+          git clone https://github.com/mudler/LocalAGI.git
+          cd LocalAGI
+          docker compose -f docker-compose.nvidia.yaml build
+          docker images
+          docker tag localai/localai:master-gpu-nvidia-cuda12 ${{ github.event.inputs.TARGET_REGISTRY }}/${{ github.event.inputs.TARGET_REPOSITORY }}/localai:master-gpu-nvidia-cuda12
+          docker push ${{ github.event.inputs.TARGET_REGISTRY }}/${{ github.event.inputs.TARGET_REPOSITORY }}/localai:master-gpu-nvidia-cuda12
+          
+          docker tag localagi ${{ github.event.inputs.TARGET_REGISTRY }}/${{ github.event.inputs.TARGET_REPOSITORY }}/localagi
+          docker push ${{ github.event.inputs.TARGET_REGISTRY }}/${{ github.event.inputs.TARGET_REPOSITORY }}/localagi
+          
+          docker tag mcpbox ${{ github.event.inputs.TARGET_REGISTRY }}/${{ github.event.inputs.TARGET_REPOSITORY }}/mcpbox
+          docker push ${{ github.event.inputs.TARGET_REGISTRY }}/${{ github.event.inputs.TARGET_REPOSITORY }}/mcpbox
+
+          docker tag sshbox ${{ github.event.inputs.TARGET_REGISTRY }}/${{ github.event.inputs.TARGET_REPOSITORY }}/sshbox
+          docker push ${{ github.event.inputs.TARGET_REGISTRY }}/${{ github.event.inputs.TARGET_REPOSITORY }}/sshbox
+
+          docker tag busybox ${{ github.event.inputs.TARGET_REGISTRY }}/${{ github.event.inputs.TARGET_REPOSITORY }}/busybox
+          docker push ${{ github.event.inputs.TARGET_REGISTRY }}/${{ github.event.inputs.TARGET_REPOSITORY }}/busybox
+
+          docker tag dind ${{ github.event.inputs.TARGET_REGISTRY }}/${{ github.event.inputs.TARGET_REPOSITORY }}/dind
+          docker push ${{ github.event.inputs.TARGET_REGISTRY }}/${{ github.event.inputs.TARGET_REPOSITORY }}/dind
+        continue-on-error: true
+
+      - name: 检查镜像推送成功
+        if: ${{ steps.pull_tag_push.outcome == 'success' }}
+        run: echo "Docker 镜像推送成功"
+
+      - name: 检查镜像推送失败
+        if: ${{ steps.pull_tag_push.outcome != 'success' }}
+        run: echo "Docker 镜像推送失败"
