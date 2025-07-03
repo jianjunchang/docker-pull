@@ -49,23 +49,24 @@ jobs:
           cd LocalAGI
           docker compose -f docker-compose.nvidia.yaml build
           docker images
-          docker tag docker.io/library/localai/localai:master-gpu-nvidia-cuda12 ${{ github.event.inputs.TARGET_REGISTRY }}/${{ github.event.inputs.TARGET_REPOSITORY }}/localai:master-gpu-nvidia-cuda12
-          docker push ${{ github.event.inputs.TARGET_REGISTRY }}/${{ github.event.inputs.TARGET_REPOSITORY }}/localai:master-gpu-nvidia-cuda12
+          # docker tag docker.io/library/localai/localai:master-gpu-nvidia-cuda12 ${{ github.event.inputs.TARGET_REGISTRY }}/${{ github.event.inputs.TARGET_REPOSITORY }}/localai:master-gpu-nvidia-cuda12
+          # docker push ${{ github.event.inputs.TARGET_REGISTRY }}/${{ github.event.inputs.TARGET_REPOSITORY }}/localai:master-gpu-nvidia-cuda12
           
           docker tag localagi-localagi ${{ github.event.inputs.TARGET_REGISTRY }}/${{ github.event.inputs.TARGET_REPOSITORY }}/localagi
           docker push ${{ github.event.inputs.TARGET_REGISTRY }}/${{ github.event.inputs.TARGET_REPOSITORY }}/localagi
           
           docker tag localagi-mcpbox ${{ github.event.inputs.TARGET_REGISTRY }}/${{ github.event.inputs.TARGET_REPOSITORY }}/mcpbox
           docker push ${{ github.event.inputs.TARGET_REGISTRY }}/${{ github.event.inputs.TARGET_REPOSITORY }}/mcpbox
+          docker images
+          
+          # docker tag localagi-sshbox ${{ github.event.inputs.TARGET_REGISTRY }}/${{ github.event.inputs.TARGET_REPOSITORY }}/sshbox
+          # docker push ${{ github.event.inputs.TARGET_REGISTRY }}/${{ github.event.inputs.TARGET_REPOSITORY }}/sshbox
 
-          docker tag localagi-sshbox ${{ github.event.inputs.TARGET_REGISTRY }}/${{ github.event.inputs.TARGET_REPOSITORY }}/sshbox
-          docker push ${{ github.event.inputs.TARGET_REGISTRY }}/${{ github.event.inputs.TARGET_REPOSITORY }}/sshbox
+          # docker tag docker.io/library/busybox ${{ github.event.inputs.TARGET_REGISTRY }}/${{ github.event.inputs.TARGET_REPOSITORY }}/busybox
+          # docker push ${{ github.event.inputs.TARGET_REGISTRY }}/${{ github.event.inputs.TARGET_REPOSITORY }}/busybox
 
-          docker tag docker.io/library/busybox ${{ github.event.inputs.TARGET_REGISTRY }}/${{ github.event.inputs.TARGET_REPOSITORY }}/busybox
-          docker push ${{ github.event.inputs.TARGET_REGISTRY }}/${{ github.event.inputs.TARGET_REPOSITORY }}/busybox
-
-          docker tag docker.io/library/dind ${{ github.event.inputs.TARGET_REGISTRY }}/${{ github.event.inputs.TARGET_REPOSITORY }}/dind
-          docker push ${{ github.event.inputs.TARGET_REGISTRY }}/${{ github.event.inputs.TARGET_REPOSITORY }}/dind
+          # docker tag docker.io/library/dind ${{ github.event.inputs.TARGET_REGISTRY }}/${{ github.event.inputs.TARGET_REPOSITORY }}/dind
+          # docker push ${{ github.event.inputs.TARGET_REGISTRY }}/${{ github.event.inputs.TARGET_REPOSITORY }}/dind
         continue-on-error: true
 
       - name: 检查镜像推送成功
