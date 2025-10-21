@@ -56,8 +56,10 @@ jobs:
         run: |
           echo $(basename "${{ github.event.inputs.FILE_NAME }}")
           echo 'FROM python:3.10-bullseye' >> Dockerfile
-          echo 'RUN git clone ${{ github.event.inputs.FILE_NAME }} repo && cd repo' >> Dockerfile
-          echo 'RUN git submodule update --init --recursive --depth 1 && cd ..' >> Dockerfile
+          echo 'RUN git clone ${{ github.event.inputs.FILE_NAME }} repo' >> Dockerfile
+          echo 'RUN cd repo' >> Dockerfile
+          echo 'RUN git submodule update --init --recursive --depth 1' >> Dockerfile
+          echo 'RUN cd ..' >> Dockerfile
           echo 'CMD ["/usr/sbin/sshd", "-D"]' >> Dockerfile
           docker build -t ${{ github.event.inputs.IMAGE_NAME }} .
           docker tag ${{ github.event.inputs.IMAGE_NAME }} ${{ github.event.inputs.TARGET_REGISTRY }}/${{ github.event.inputs.TARGET_REPOSITORY }}/${{ github.event.inputs.IMAGE_NAME }}
